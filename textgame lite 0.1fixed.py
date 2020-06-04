@@ -35,7 +35,7 @@ class weapon:
 #simple string list of weapons for combat check
 weaponlist = ['sword']
 #weapon stats and descriptions
-Sword = weapon('sword',5,'A well balanced, sharp sword. You feel confident with this in your hand.')
+sword = weapon('sword',5,'A well balanced, sharp sword. You feel confident with this in your hand.')
 
 #items
 ##__LIST OF ROOMS__##
@@ -49,7 +49,7 @@ rooms = [
 #room specific actions
 def roomaction(action):
     if action == 'move brush':
-        rooms[player.location]['roominv'].append(Sword)
+        rooms[player.location]['roominv'].append(sword)
         print('You move aside the brush to reveal an old sword, forgotten to time.')
         rooms[1]['inspect']='the path is dark and confusing, but you manage to see the path continues north. you have moved the pile of brush'
         rooms[1]['action']='noaction'
@@ -61,6 +61,7 @@ def combat(combatenemy,playerweapon):
     combatenemy.health -= playerweapon.damage
     if combatenemy.health > 0:
         player.health -= combatenemy.damage
+    
 
 
 ##__the actual game__##
@@ -117,7 +118,7 @@ while command != 'exit game':
             while invcheck < len(player.inventory):
                 if str(command.split()[2]) == player.inventory[invcheck].name:
                     if command.split()[2] in weaponlist:
-                        combat(activeroom['enemy'],player.inventory[invcheck])
+                        combat(activeroom['enemies'][0],player.inventory[invcheck])
                 invcheck += 1
 
         
