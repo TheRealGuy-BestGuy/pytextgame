@@ -36,9 +36,10 @@ class weapon:
         self.hitchance = hitchance
 
 #simple string list of weapons for combat check
-weaponlist = ['sword']
+weaponlist = ['sword','fists']
 #weapon stats and descriptions
 sword = weapon('sword',5,'A well balanced, sharp sword. You feel confident with this in your hand.',75)
+fists = weapon('fists',2,'your own two fists.',25)
 
 #items
 ##__LIST OF ROOMS__##
@@ -130,6 +131,8 @@ while command != 'exit game':
             while invcheck < len(player.inventory):
                 print(player.inventory[invcheck].name)
                 invcheck += 1
+        elif len(player.inventory) == 0:
+            print('nothing')
         print('and a few crumbs.')
     elif 'eat' and 'crumbs' in command:
         print('You pick at the crumbs in the bottom of your bag, but mostly you just hair and lint.')
@@ -142,5 +145,3 @@ while command != 'exit game':
                     if command.split()[2] in weaponlist:
                         combat(activeroom['enemies'][0],player.inventory[invcheck])
                 invcheck += 1
-
-        
