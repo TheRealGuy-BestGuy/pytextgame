@@ -18,24 +18,27 @@ player = character(playername,10,0,[])
 
 #enemies class
 class enemy:
-    def __init__(self,name,health,damage):
+    def __init__(self,name,health,damage,hitchance):
         self.name = name
         self.health = health
         self.damage = damage
+        self.hitchance = hitchance
 
 #enemies
-goblin = enemy('goblin',3,1)
+goblin = enemy('goblin',3,1,30)
 
 #weapons class
 class weapon:
-    def __init__(self,name,damage,description):
+    def __init__(self,name,damage,description,hitchance):
         self.name = name
         self.damage = damage
         self.description = description
+        self.hitchance = hitchance
+
 #simple string list of weapons for combat check
 weaponlist = ['sword']
 #weapon stats and descriptions
-sword = weapon('sword',5,'A well balanced, sharp sword. You feel confident with this in your hand.')
+sword = weapon('sword',5,'A well balanced, sharp sword. You feel confident with this in your hand.',75)
 
 #items
 ##__LIST OF ROOMS__##
@@ -58,9 +61,22 @@ def roomaction(action):
     else:
         print("idk how you got here but the code dun messed up")
 def combat(combatenemy,playerweapon):
-    combatenemy.health -= playerweapon.damage
+    roll = random.randint(1,100)
+    if roll <= playerweapon.hitchance:
+        combatenemy.health -= playerweapon.damage
+    else:
+        print('you failed to hit the ',(combatenemy.name),'.')
     if combatenemy.health > 0:
-        player.health -= combatenemy.damage
+        enemyroll = random.randint(1,100)
+        if enemyroll <= combatenemy.hitchance:
+            player.health -= combatenemy.damage
+            print('you were struck by the ',(combatenemy.name),' dealing ',str(combatenemy.damage),'damage')
+            print('your health is now ',str(player.health))
+        else:
+            print('the',(combatenemy.name),'swung and failed to strike you')
+    elif combatenemy.health <= 0:
+        print('you have defeated the ',(combatenemy.name),'.')
+        rooms[player.location]['enemies'] = []
     
 
 
@@ -108,7 +124,13 @@ while command != 'exit game':
     elif activeroom['action'] in command:
         roomaction(activeroom['action'])
     elif 'inventory' in command:
-        print('your inventory contains',list(player.inventory),'and a few crumbs.')
+        print('your inventory contains')
+        invcheck = 0
+        if invcheck < len(player.inventory):
+            while invcheck < len(player.inventory):
+                print(player.inventory[invcheck].name)
+                invcheck += 1
+        print('and a few crumbs.')
     elif 'eat' and 'crumbs' in command:
         print('You pick at the crumbs in the bottom of your bag, but mostly you just hair and lint.')
         print('Your stomach rumbles')
